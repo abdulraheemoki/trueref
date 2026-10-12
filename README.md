@@ -17,7 +17,7 @@ Styles for fixing and creating: Harvard (Cite Them Right), APA 7th, Chicago auth
 - TrueRef **never rewrites the essay**. It only reads it and points things out. The reference list is the only thing it reformats.
 - The only network request is optional and clearly labelled: looking up reference details on Crossref (a DOI, or the text of a reference). The essay is never sent.
 - The page's Content Security Policy only allows connections to its own site and `api.crossref.org`, so this is enforced by the browser, not just promised.
-- Once loaded, it works with Wi-Fi turned off.
+- It can be installed as an app (Add to Home Screen / Install app) and opens with no internet after the first visit. The offline copy holds only TrueRef's own files, never anything a person types or uploads.
 - Light and dark mode follow the device setting, with a switch to change it. The choice is remembered only in that browser.
 - The layout adapts to phones, tablets and desktops.
 
@@ -31,6 +31,8 @@ public/            The website (this is all that gets hosted)
   vendor/          citeproc-js, mammoth.js, PDF.js
   csl/             Referencing styles and language files
   theme.js         Applies your saved light/dark choice before the page draws
+  sw.js            Offline support (keeps a copy of the app's own files)
+  manifest.webmanifest, icons/   Makes it installable as an app
   _headers         Security headers for Cloudflare
 tests/             Sample essays and scripts to test core.js in Node
 wrangler.jsonc     Cloudflare config (static files only)
@@ -57,6 +59,10 @@ npm test
 ## Deploy (free) on Cloudflare
 
 Same as TrueCVFit: push this folder to a GitHub repository, then in Cloudflare go to **Workers & Pages → Create → Import a repository**, pick the repo and deploy. Cloudflare reads `wrangler.jsonc` and serves the `public` folder. No build command is needed.
+
+## Releasing an update
+
+When you change any file in `public`, also change the `VERSION` line at the top of `public/sw.js` (for example `trueref-v3` to `trueref-v4`). That tells installed copies to fetch the new version.
 
 ## Known limits
 

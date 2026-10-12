@@ -8,6 +8,11 @@
 <meta name="theme-color" content="#EEF1F5" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#121722" media="(prefers-color-scheme: dark)">
 <title>TrueRef</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="TrueRef">
 <script src="theme.js"></script>
 <meta name="description" content="Check your citations against your reference list, fix the order and format of your references, and create new ones. Free, no sign-up, and your work never leaves your device.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231D2A44'/%3E%3Crect x='7' y='17' width='18' height='6' fill='%23F5D547'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
@@ -59,6 +64,8 @@ header.top { padding: 40px 0 8px; }
 .brand { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
 .themebtn { appearance: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 8px 14px; font: 600 0.9rem/1 var(--sans); cursor: pointer; min-height: 40px; }
 .themebtn:hover { border-color: var(--ink); }
+.themebtn[hidden] { display: none; }
+.headbtns { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
 .themebtn .sun { display: none; }
 .dark-on .themebtn .sun { display: block; }
 .dark-on .themebtn .moon { display: none; }
@@ -94,7 +101,7 @@ nav.tools button:hover { color: var(--ink); }
   .toast { left: 16px; right: 16px; transform: none; text-align: center; }
 }
 @media (max-width: 400px) {
-  .themebtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  #themeBtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .themebtn { padding: 8px 10px; }
 }
 @media (max-width: 480px) {
@@ -236,11 +243,17 @@ details.how div { padding: 8px 0 0; color: var(--ink-soft); max-width: 75ch; }
   <header class="top">
     <div class="brand">
       <h1>True<span class="r">Ref</span></h1>
+      <div class="headbtns">
+      <button class="themebtn" id="installBtn" type="button" hidden>
+        <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0l-5-5m5 5l5-5M4 19h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Install app</span>
+      </button>
       <button class="themebtn" id="themeBtn" type="button" aria-pressed="false">
         <svg class="moon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
         <svg class="sun" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
         <span id="themeLabel">Dark mode</span>
       </button>
+      </div>
     </div>
     <p class="tagline">Check that your citations match your reference list, put your list in the right order and style, and create new references.</p>
     <ul class="promise" aria-label="Privacy">
@@ -418,7 +431,16 @@ details.how div { padding: 8px 0 0; color: var(--ink-soft); max-width: 75ch; }
       <div>
         <p>Everything happens inside your browser. Your essay and files are never uploaded, saved or tracked. There is no account, no analytics and no database.</p>
         <p>The only time anything goes online is when you choose a DOI lookup or switch on "Look up details online". Then only the reference details go to Crossref, a free public database of published works.</p>
-        <p>Want proof? Once this page has loaded, turn off your Wi-Fi. Checking, fixing and creating references all still work.</p>
+        <p>Want proof? Turn off your Wi-Fi. Checking, fixing and creating references all still work.</p>
+      </div>
+    </details>
+    <details class="how" id="installHow">
+      <summary>Use TrueRef as an app, even offline</summary>
+      <div>
+        <p>After your first visit, TrueRef keeps a copy of itself on your device, so it opens even with no internet. Only DOI and Crossref lookups need a connection.</p>
+        <p><strong>iPhone or iPad:</strong> open TrueRef in Safari, tap the Share button, then "Add to Home Screen".</p>
+        <p><strong>Android:</strong> open TrueRef in Chrome, tap the ⋮ menu, then "Install app" or "Add to Home screen".</p>
+        <p><strong>Laptop:</strong> in Chrome or Edge, click "Install app" at the top of this page, or the install icon in the address bar.</p>
         <p>TrueRef never rewrites your essay, so it cannot make your writing look AI-generated. It only points out things for you to fix in your own words.</p>
       </div>
     </details>

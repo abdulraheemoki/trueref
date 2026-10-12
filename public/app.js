@@ -118,6 +118,26 @@
   sysDark.addEventListener('change', syncThemeBtn);
   syncThemeBtn();
 
+  // ---------- offline + install ----------
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+  }
+  let installEvent = null;
+  const installBtn = $('#installBtn');
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    installEvent = e;
+    installBtn.hidden = false;
+  });
+  installBtn.addEventListener('click', async () => {
+    if (!installEvent) return;
+    installEvent.prompt();
+    await installEvent.userChoice.catch(() => {});
+    installEvent = null;
+    installBtn.hidden = true;
+  });
+  window.addEventListener('appinstalled', () => { installBtn.hidden = true; toast('TrueRef is installed. Open it from your home screen or apps.'); });
+
   // ---------- tabs ----------
   const tabs = $$('nav.tools [role=tab]');
   function selectTab(tab) {
