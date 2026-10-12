@@ -1,0 +1,9 @@
+{
+  // Cloudflare Worker that only serves the static files in /public.
+  // There is no server code, no database and no storage.
+  "name": "trueref",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "name": "trueref",
+  "version": "1.0.0",
+  "description": "Free, private referencing checker and formatter that runs entirely in the browser.",
+  "private": true,
+  "scripts": {
+    "test": "node tests/run.js tests/sample-harvard.txt harvard && node tests/run.js tests/sample-apa.txt apa && node tests/run.js tests/sample-chicago-messy.txt chicago"
+  },
+  "devDependencies": {
+    "citeproc": "^2.4.63"
+  }
+}

@@ -1,0 +1,14 @@
+Digital marketing has changed how firms reach customers (Kotler & Keller, 2016). Chaffey and Ellis-Chadwick (2019) describe the main channels, while Kannan and Li (2017) offer a research framework. Social media engagement drives loyalty (Lemon & Verhoef, 2016; Hollebeek et al., 2014). According to the Office for National Statistics (2022), online sales grew. Some authors (Smith and Lee, 2018) disagree. Ryan states that "digital is no longer a channel but the environment" (Ryan, 2020). Recent work extends this (Kumar, 2021a, 2021b). Ofcom (n.d.) offers data. Dwivedi et al. (2021) review the field.
+
+References
+Chaffey, D., & Ellis-Chadwick, F. (2019). Digital marketing (7th ed.). Pearson.
+Dwivedi, Y. K., Ismagilova, E., Hughes, D. L., Carlson, J., Filieri, R., Jacobson, J., Jain, V., Karjaluoto, H., Kefi, H., Krishen, A. S., Kumar, V., Rahman, M. M., Raman, R., Rauschnabel, P. A., Rowley, J., Salo, J., Tran, G. A., & Wang, Y. (2021). Setting the future of digital and social media marketing research: Perspectives and research propositions. International Journal of Information Management, 59, 102168. https://doi.org/10.1016/j.ijinfomgt.2020.102168
+Hollebeek, L. D., Glynn, M. S., & Brodie, R. J. (2014). Consumer brand engagement in social media: Conceptualization, scale development and validation. Journal of Interactive Marketing, 28(2), 149–165. https://doi.org/10.1016/j.intmar.2013.12.002
+Kannan, P. K., & Li, H. A. (2017). Digital marketing: A framework, review and research agenda. International Journal of Research in Marketing, 34(1), 22–45.
+Kotler, P., & Keller, K. L. (2016). Marketing management (15th ed.). Pearson.
+Kumar, V. (2021a). Transformative marketing. Journal of Marketing, 85(1), 1–5.
+Kumar, V. (2021b). Intellectual foundations of tomorrow's marketing. Journal of Marketing Theory and Practice, 29(4), 1–12.
+Lemon, K. N., & Verhoef, P. C. (2016). Understanding customer experience throughout the customer journey. Journal of Marketing, 80(6), 69–96.
+Office for National Statistics. (2022). Retail sales, Great Britain: December 2022. https://www.ons.gov.uk/businessindustryandtrade/retailindustry
+Ofcom. (n.d.). Online nation. https://www.ofcom.org.uk/research
+Ryan, D. (2020). Understanding digital marketing (5th ed.). Kogan Page.

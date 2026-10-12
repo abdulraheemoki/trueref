@@ -1,0 +1,439 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; worker-src 'self' blob:; connect-src 'self' https://api.crossref.org; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#EEF1F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121722" media="(prefers-color-scheme: dark)">
+<title>TrueRef</title>
+<script src="theme.js"></script>
+<meta name="description" content="Check your citations against your reference list, fix the order and format of your references, and create new ones. Free, no sign-up, and your work never leaves your device.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231D2A44'/%3E%3Crect x='7' y='17' width='18' height='6' fill='%23F5D547'/%3E%3Ctext x='16' y='22' font-family='Georgia,serif' font-size='17' text-anchor='middle' fill='%23fff'%3ER%3C/text%3E%3C/svg%3E">
+<style>
+:root {
+  --ink: #1D2A44;
+  --ink-soft: #4A566E;
+  --paper: #FFFFFF;
+  --desk: #EEF1F5;
+  --rule: #D5DBE4;
+  --mark: #F5D547;
+  --mark-soft: #FBEFA9;
+  --high: #B3261E;
+  --high-bg: #FBEAE8;
+  --med: #9A5B00;
+  --med-bg: #FDF1DE;
+  --low: #3B5B8C;
+  --low-bg: #E8EEF8;
+  --good: #1F7A55;
+  --good-bg: #E3F3EB;
+  --focus: #2F6FED;
+  --serif: Charter, "Bitstream Charter", "Iowan Old Style", "Sitka Text", Cambria, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --radius: 10px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #E7EBF3; --ink-soft: #A9B3C6; --paper: #1A2130; --desk: #121722; --rule: #303A4E;
+    --mark: #8C7414; --mark-soft: #5A4C10; --high: #FF8A80; --high-bg: #3A1D1D; --med: #F2B45C; --med-bg: #3A2C14;
+    --low: #9DB8E8; --low-bg: #1E2A40; --good: #6FD3A2; --good-bg: #173326; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #E7EBF3; --ink-soft: #A9B3C6; --paper: #1A2130; --desk: #121722; --rule: #303A4E;
+  --mark: #8C7414; --mark-soft: #5A4C10; --high: #FF8A80; --high-bg: #3A1D1D; --med: #F2B45C; --med-bg: #3A2C14;
+  --low: #9DB8E8; --low-bg: #1E2A40; --good: #6FD3A2; --good-bg: #173326; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { transition: background-color .2s, color .2s; }
+body { margin: 0; background: var(--desk); color: var(--ink); font: 16px/1.5 var(--sans); }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 4px; }
+.wrap { max-width: 1060px; margin: 0 auto; padding: 0 16px; }
+
+/* Header */
+header.top { padding: 40px 0 8px; }
+.brand { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+.themebtn { appearance: none; display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 8px 14px; font: 600 0.9rem/1 var(--sans); cursor: pointer; min-height: 40px; }
+.themebtn:hover { border-color: var(--ink); }
+.themebtn .sun { display: none; }
+.dark-on .themebtn .sun { display: block; }
+.dark-on .themebtn .moon { display: none; }
+.brand h1 { font: 600 2.6rem/1 var(--serif); margin: 0; letter-spacing: -0.01em; }
+.brand h1 .r { background: linear-gradient(transparent 58%, var(--mark) 58%, var(--mark) 92%, transparent 92%); padding: 0 2px; }
+.tagline { font: 1.15rem/1.45 var(--serif); color: var(--ink-soft); margin: 12px 0 0; max-width: 62ch; }
+.promise { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 18px 0 0; padding: 0; list-style: none; font-size: 0.93rem; color: var(--ink-soft); }
+.promise li { display: flex; align-items: center; gap: 7px; }
+.promise svg { flex: none; color: var(--good); }
+
+/* Tool switcher */
+nav.tools { display: flex; gap: 4px; margin: 28px 0 0; border-bottom: 1px solid var(--rule); overflow-x: auto; }
+nav.tools button { appearance: none; border: 0; background: none; font: 600 1rem/1.2 var(--sans); color: var(--ink-soft); padding: 12px 14px 13px; border-bottom: 3px solid transparent; margin-bottom: -1px; cursor: pointer; white-space: nowrap; }
+nav.tools button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+nav.tools button:hover { color: var(--ink); }
+@media (max-width: 600px) {
+  header.top { padding-top: 24px; }
+  .tagline { font-size: 1.05rem; }
+  .sheet { padding: 16px; }
+  textarea { min-height: 170px; }
+  .row { align-items: stretch; }
+  .row > .grow { max-width: none !important; flex-basis: 100%; }
+  .row > .btn { flex: 1 1 100%; justify-content: center; }
+  .outhead .btn, .outhead > div { flex: 1 1 100%; justify-content: center; }
+  .outhead > div { flex-direction: column; }
+  .outhead > div .btn { width: 100%; justify-content: center; }
+  .dropzone { padding: 14px; }
+  .dropzone .btn { width: 100%; justify-content: center; }
+  .issue { grid-template-columns: 4px 1fr; gap: 0 12px; }
+  .excerpt { padding: 8px 10px; }
+  .output .csl-entry { padding-left: 1.2em; text-indent: -1.2em; }
+  #cDoiFill { flex: 1 1 100%; justify-content: center; }
+  .toast { left: 16px; right: 16px; transform: none; text-align: center; }
+}
+@media (max-width: 400px) {
+  .themebtn span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  .themebtn { padding: 8px 10px; }
+}
+@media (max-width: 480px) {
+  nav.tools { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; overflow: visible; }
+  nav.tools button { white-space: normal; padding: 10px 6px 11px; font-size: 0.92rem; line-height: 1.25; }
+  .brand h1 { font-size: 2.2rem; }
+}
+
+main { padding: 24px 0 40px; }
+.panel[hidden] { display: none; }
+.intro { margin: 0 0 18px; max-width: 70ch; color: var(--ink-soft); }
+
+/* Sheets: the paper the student works on */
+.sheet { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius); padding: 20px; }
+.sheet + .sheet { margin-top: 16px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 760px) { .grid2 { grid-template-columns: 1fr; } }
+
+label.field, .fieldlabel { display: block; font-weight: 600; font-size: 0.95rem; margin: 0 0 6px; }
+.hint { font-size: 0.88rem; color: var(--ink-soft); font-weight: 400; }
+textarea, input[type=text], input[type=url], input[type=search], select {
+  width: 100%; font: 1rem/1.5 var(--sans); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px;
+}
+textarea { min-height: 220px; resize: vertical; font-family: var(--serif); font-size: 0.98rem; line-height: 1.55; }
+textarea.short { min-height: 160px; }
+select { appearance: auto; }
+input:focus, textarea:focus, select:focus { outline: 2px solid var(--focus); outline-offset: 0; border-color: var(--focus); }
+
+.dropzone { border: 2px dashed var(--rule); border-radius: var(--radius); padding: 18px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; background: var(--paper); }
+.dropzone.drag { border-color: var(--focus); background: var(--low-bg); }
+.dropzone p { margin: 0; flex: 1 1 260px; color: var(--ink-soft); font-size: 0.95rem; }
+.dropzone strong { color: var(--ink); }
+
+.row { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; margin-top: 16px; }
+.row > .grow { flex: 1 1 220px; }
+
+.btn { appearance: none; border: 1px solid var(--ink); background: var(--ink); color: var(--paper); font: 600 1rem/1 var(--sans); padding: 12px 20px; border-radius: 8px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; min-height: 46px; }
+.btn:hover { filter: brightness(1.12); }
+.btn { white-space: nowrap; }
+.btn.secondary { background: var(--paper); color: var(--ink); border-color: var(--rule); }
+.btn.secondary:hover { border-color: var(--ink); filter: none; }
+.btn.small { padding: 8px 12px; min-height: 36px; font-size: 0.92rem; }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.linkbtn { appearance: none; background: none; border: 0; padding: 0; color: var(--ink); text-decoration: underline; cursor: pointer; font: inherit; }
+
+.notice { border-radius: 8px; padding: 10px 14px; font-size: 0.95rem; margin-top: 12px; }
+.notice.info { background: var(--low-bg); color: var(--ink); }
+.notice.warn { background: var(--med-bg); color: var(--ink); }
+.notice.error { background: var(--high-bg); color: var(--ink); }
+.notice[hidden] { display: none; }
+
+.switch { display: flex; gap: 10px; align-items: flex-start; font-size: 0.95rem; cursor: pointer; }
+.switch input { width: 20px; height: 20px; margin: 2px 0 0; flex: none; accent-color: var(--ink); }
+
+/* Results */
+#checkResults[hidden] { display: none; }
+.summary { font: 1.3rem/1.4 var(--serif); margin: 0 0 4px; }
+.counts { display: flex; flex-wrap: wrap; gap: 8px 20px; color: var(--ink-soft); font-size: 0.93rem; margin: 0 0 6px; }
+.filterbar { display: flex; gap: 8px; flex-wrap: wrap; margin: 14px 0 4px; }
+.chip { appearance: none; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 6px 12px; font: 600 0.88rem/1 var(--sans); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.issues { list-style: none; margin: 10px 0 0; padding: 0; }
+.issue { display: grid; grid-template-columns: 6px 1fr; gap: 0 16px; padding: 16px 0; border-top: 1px solid var(--rule); }
+.issue:first-child { border-top: 0; }
+.issue .bar { border-radius: 3px; }
+.issue.high .bar { background: var(--high); }
+.issue.medium .bar { background: var(--med); }
+.issue.low .bar { background: var(--low); }
+.issue h3 { font: 600 1.02rem/1.35 var(--sans); margin: 0 0 4px; }
+.issue .sev { font-size: 0.8rem; font-weight: 600; margin-right: 8px; padding: 2px 8px; border-radius: 4px; vertical-align: 1px; }
+.issue.high .sev { background: var(--high-bg); color: var(--high); }
+.issue.medium .sev { background: var(--med-bg); color: var(--med); }
+.issue.low .sev { background: var(--low-bg); color: var(--low); }
+.issue p { margin: 0; color: var(--ink-soft); font-size: 0.96rem; }
+.excerpt { font: 0.98rem/1.6 var(--serif); margin: 10px 0 0; padding: 10px 14px; background: var(--desk); border-radius: 6px; color: var(--ink); overflow-wrap: anywhere; }
+.excerpt mark { background: linear-gradient(transparent 12%, var(--mark) 12%, var(--mark) 88%, transparent 88%); color: inherit; padding: 0 1px; }
+.excerpt .src { display: block; font: 600 0.78rem/1.2 var(--sans); color: var(--ink-soft); margin-bottom: 4px; }
+.allgood { display: flex; gap: 12px; align-items: center; padding: 16px; background: var(--good-bg); border-radius: 8px; color: var(--ink); }
+.allgood svg { color: var(--good); flex: none; }
+
+/* Fix my list review */
+.entries { list-style: none; padding: 0; margin: 0; counter-reset: e; }
+.entry { border-top: 1px solid var(--rule); padding: 14px 0; }
+.entry:first-child { border-top: 0; }
+.entry .orig { font: 0.95rem/1.5 var(--serif); color: var(--ink); overflow-wrap: anywhere; }
+.entry .meta { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; font-size: 0.88rem; color: var(--ink-soft); }
+.badge { font-weight: 600; font-size: 0.8rem; padding: 2px 8px; border-radius: 4px; }
+.badge.high { background: var(--good-bg); color: var(--good); }
+.badge.medium { background: var(--med-bg); color: var(--med); }
+.badge.low { background: var(--high-bg); color: var(--high); }
+.badge.online { background: var(--low-bg); color: var(--low); }
+.entry.needs .orig { background: var(--mark-soft); border-radius: 4px; box-shadow: 0 0 0 4px var(--mark-soft); }
+.editor { display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px 12px; margin-top: 12px; padding: 14px; background: var(--desk); border-radius: 8px; }
+.editor[hidden] { display: none; }
+.editor .f { grid-column: span 2; }
+.editor .f.wide { grid-column: span 6; }
+.editor .f.half { grid-column: span 3; }
+.editor .f.third { grid-column: span 2; }
+.editor .f.sixth { grid-column: span 1; }
+.editor label { display: block; font-size: 0.82rem; font-weight: 600; margin-bottom: 4px; color: var(--ink-soft); }
+.editor input, .editor select, .editor textarea { padding: 7px 9px; font-size: 0.95rem; }
+.editor textarea { min-height: 64px; font-family: var(--sans); }
+@media (max-width: 760px) { .editor .f, .editor .f.half, .editor .f.third, .editor .f.sixth { grid-column: span 3; } .editor .f.wide { grid-column: span 6; } }
+
+.output { font: 1rem/1.6 var(--serif); }
+.output .csl-entry { margin: 0 0 10px; padding-left: 2em; text-indent: -2em; overflow-wrap: anywhere; }
+.output.numbered .csl-entry { padding-left: 0; text-indent: 0; }
+.output .csl-left-margin { display: inline-block; min-width: 2.2em; }
+.output .csl-right-inline { display: inline; }
+.outhead { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.outhead h2, .sheet h2 { font: 600 1.25rem/1.3 var(--serif); margin: 0; }
+.intext { margin-top: 12px; font-size: 0.95rem; color: var(--ink-soft); }
+.intext code { font: 0.98rem var(--serif); color: var(--ink); background: var(--desk); padding: 2px 6px; border-radius: 4px; }
+
+.formgrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px 14px; }
+.formgrid .f { grid-column: span 3; }
+.formgrid .f.wide { grid-column: span 6; }
+.formgrid .f.third { grid-column: span 2; }
+.formgrid .f[hidden] { display: none; }
+@media (max-width: 760px) { .formgrid .f, .formgrid .f.third { grid-column: span 6; } .formgrid .f.num { grid-column: span 2; } }
+.formgrid label { display: block; font-weight: 600; font-size: 0.92rem; margin-bottom: 5px; }
+
+.toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--ink); color: var(--paper); padding: 10px 18px; border-radius: 8px; font-weight: 600; opacity: 0; pointer-events: none; transition: opacity .2s; z-index: 10; }
+.toast.show { opacity: 1; }
+
+footer { border-top: 1px solid var(--rule); padding: 24px 0 40px; color: var(--ink-soft); font-size: 0.9rem; }
+footer p { margin: 0 0 8px; max-width: 75ch; }
+details.how { margin-top: 28px; }
+details.how summary { cursor: pointer; font-weight: 600; }
+details.how div { padding: 8px 0 0; color: var(--ink-soft); max-width: 75ch; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>True<span class="r">Ref</span></h1>
+      <button class="themebtn" id="themeBtn" type="button" aria-pressed="false">
+        <svg class="moon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5z" fill="currentColor"/></svg>
+        <svg class="sun" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor"/><g stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></g></svg>
+        <span id="themeLabel">Dark mode</span>
+      </button>
+    </div>
+    <p class="tagline">Check that your citations match your reference list, put your list in the right order and style, and create new references.</p>
+    <ul class="promise" aria-label="Privacy">
+      <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Free, no sign-up</li>
+      <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Your work never leaves your device</li>
+      <li><svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>Never rewrites your essay</li>
+    </ul>
+    <nav class="tools" role="tablist" aria-label="Tools">
+      <button role="tab" id="tab-check" aria-controls="panel-check" aria-selected="true">Check my work</button>
+      <button role="tab" id="tab-fix" aria-controls="panel-fix" aria-selected="false" tabindex="-1">Fix my reference list</button>
+      <button role="tab" id="tab-create" aria-controls="panel-create" aria-selected="false" tabindex="-1">Create a reference</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- CHECK -->
+    <section class="panel" id="panel-check" role="tabpanel" aria-labelledby="tab-check">
+      <p class="intro">Upload your assignment or paste it in. TrueRef reads it and lists anything worth checking. It never changes your essay.</p>
+      <div class="dropzone" data-target="check">
+        <p><strong>Upload your assignment</strong> (Word, PDF or text). We split it into your essay and your reference list.</p>
+        <label class="btn secondary small" for="fileCheck">Choose file</label>
+        <input type="file" id="fileCheck" accept=".docx,.pdf,.txt,.md" class="sr">
+      </div>
+      <div class="notice info" id="checkNotice" hidden></div>
+      <div class="grid2" style="margin-top:16px">
+        <div>
+          <label class="field" for="essay">Your essay <span class="hint">(the main text)</span></label>
+          <textarea id="essay" placeholder="Paste your essay here…" spellcheck="false"></textarea>
+        </div>
+        <div>
+          <label class="field" for="refs">Your reference list</label>
+          <textarea id="refs" placeholder="Paste your reference list here, one reference per line…" spellcheck="false"></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="grow" style="max-width:340px">
+          <label class="field" for="checkStyle">Referencing style</label>
+          <select id="checkStyle">
+            <option value="harvard">Harvard (Cite Them Right)</option>
+            <option value="apa">APA 7th</option>
+            <option value="chicago">Chicago (author-date)</option>
+          </select>
+        </div>
+        <button class="btn" id="runCheck">Check my references</button>
+        <button class="linkbtn" id="tryExample" type="button">Try an example</button>
+      </div>
+
+      <div id="checkResults" hidden>
+        <div class="sheet" style="margin-top:24px">
+          <p class="summary" id="sumLine" tabindex="-1"></p>
+          <div class="counts" id="sumCounts"></div>
+          <div class="filterbar" id="filters" role="group" aria-label="Show"></div>
+          <ul class="issues" id="issueList"></ul>
+        </div>
+        <p class="hint" style="margin-top:12px">These are suggestions to check, not a verdict. TrueRef reads your text with rules, so unusual wording can confuse it.</p>
+      </div>
+    </section>
+
+    <!-- FIX -->
+    <section class="panel" id="panel-fix" role="tabpanel" aria-labelledby="tab-fix" hidden>
+      <p class="intro">Paste your reference list. TrueRef reads each reference, lets you check its details, then gives you the whole list in the right order and style.</p>
+      <div class="dropzone" data-target="fix">
+        <p><strong>Or upload a file</strong> (Word, PDF or text). If it is a full assignment, we take only the reference list.</p>
+        <label class="btn secondary small" for="fileFix">Choose file</label>
+        <input type="file" id="fileFix" accept=".docx,.pdf,.txt,.md" class="sr">
+      </div>
+      <div class="notice info" id="fixNotice" hidden></div>
+      <div style="margin-top:16px">
+        <label class="field" for="fixInput">Your reference list</label>
+        <textarea id="fixInput" placeholder="Paste your references here, one per line…" spellcheck="false"></textarea>
+      </div>
+      <div class="row">
+        <div class="grow" style="max-width:340px">
+          <label class="field" for="fixStyle">Change it to</label>
+          <select id="fixStyle" class="styleSelect"></select>
+        </div>
+        <button class="btn" id="runFix">Read my list</button>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <label class="switch"><input type="checkbox" id="fixOnline"><span>Look up details online <span class="hint">— fills gaps from Crossref, a free public database of published works. Only your reference list is sent, never your essay.</span></span></label>
+      </div>
+
+      <div id="fixResults" hidden>
+        <div class="sheet" style="margin-top:24px">
+          <div class="outhead">
+            <h2>Check how each reference was read</h2>
+            <span class="hint" id="fixCounts"></span>
+          </div>
+          <p class="hint" style="margin:0 0 8px">Highlighted references need a look. Open "Edit details" to correct anything, and the finished list updates straight away.</p>
+          <ol class="entries" id="entryList"></ol>
+        </div>
+        <div class="sheet">
+          <div class="outhead">
+            <h2 id="fixOutTitle">Your reference list</h2>
+            <button class="btn" id="copyFix">Copy list</button>
+          </div>
+          <div class="output" id="fixOutput"></div>
+          <p class="hint" id="fixOrderNote"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CREATE -->
+    <section class="panel" id="panel-create" role="tabpanel" aria-labelledby="tab-create" hidden>
+      <p class="intro">Fill in what you know about a source and copy the finished reference. Have a DOI? Paste it and we fill in the rest.</p>
+      <div class="sheet">
+        <div class="formgrid" id="createForm">
+          <div class="f">
+            <label for="cType">Type of source</label>
+            <select id="cType">
+              <option value="article-journal">Journal article</option>
+              <option value="book">Book</option>
+              <option value="chapter">Chapter in an edited book</option>
+              <option value="webpage">Web page</option>
+              <option value="report">Report</option>
+            </select>
+          </div>
+          <div class="f">
+            <label for="cStyle">Referencing style</label>
+            <select id="cStyle" class="styleSelect"></select>
+          </div>
+          <div class="f wide">
+            <label for="cDoi">DOI <span class="hint">(optional — e.g. 10.1016/j.jbusres.2020.01.001)</span></label>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <input type="text" id="cDoi" style="flex:1 1 260px" autocomplete="off" spellcheck="false">
+              <button class="btn secondary" id="cDoiFill" type="button">Fill in from DOI</button>
+            </div>
+            <p class="hint" style="margin:6px 0 0">This looks up the DOI on Crossref. Only the DOI is sent.</p>
+            <div class="notice" id="cDoiNotice" hidden></div>
+          </div>
+          <div class="f wide">
+            <label for="cAuthors">Authors <span class="hint">— one per line, Surname, First name. For an organisation, just type its name.</span></label>
+            <textarea id="cAuthors" class="short" style="min-height:90px;font-family:var(--sans)" placeholder="Smith, Jane&#10;Jones, Peter"></textarea>
+          </div>
+          <div class="f third"><label for="cYear">Year</label><input type="text" id="cYear" inputmode="numeric" placeholder="2024 or n.d."></div>
+          <div class="f wide"><label for="cTitle" id="cTitleLabel">Title of the article</label><input type="text" id="cTitle"></div>
+          <div class="f wide" data-for="article-journal chapter webpage"><label for="cContainer" id="cContainerLabel">Journal name</label><input type="text" id="cContainer"></div>
+          <div class="f wide" data-for="chapter"><label for="cEditors">Editors <span class="hint">— one per line, Surname, First name</span></label><textarea id="cEditors" class="short" style="min-height:70px;font-family:var(--sans)"></textarea></div>
+          <div class="f third num" data-for="article-journal"><label for="cVolume">Volume</label><input type="text" id="cVolume"></div>
+          <div class="f third num" data-for="article-journal"><label for="cIssue">Issue</label><input type="text" id="cIssue"></div>
+          <div class="f third num" data-for="article-journal chapter"><label for="cPages">Pages</label><input type="text" id="cPages" placeholder="45-67"></div>
+          <div class="f third" data-for="book chapter"><label for="cEdition">Edition <span class="hint">(if not the first)</span></label><input type="text" id="cEdition" placeholder="2"></div>
+          <div class="f third" data-for="book chapter report"><label for="cPlace">Place of publication</label><input type="text" id="cPlace" placeholder="London"></div>
+          <div class="f third" data-for="book chapter report"><label for="cPublisher">Publisher</label><input type="text" id="cPublisher"></div>
+          <div class="f wide" data-for="article-journal webpage report book chapter"><label for="cUrl">Web address <span class="hint" id="cUrlHint">(if you read it online)</span></label><input type="url" id="cUrl" placeholder="https://"></div>
+          <div class="f third" data-for="webpage report article-journal book chapter"><label for="cAccessed">Date you accessed it</label><input type="text" id="cAccessed" placeholder="12 October 2026"></div>
+        </div>
+      </div>
+      <div class="sheet">
+        <div class="outhead">
+          <h2>Your reference</h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn secondary" id="cAdd">Add to my list</button>
+            <button class="btn" id="cCopy">Copy reference</button>
+          </div>
+        </div>
+        <div class="output" id="cOutput"><p class="hint">Start filling in the form and your reference appears here.</p></div>
+        <p class="intext" id="cInText"></p>
+      </div>
+      <div class="sheet" id="cListSheet" hidden>
+        <div class="outhead">
+          <h2>My list <span class="hint" id="cListCount"></span></h2>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="btn secondary small" id="cClear">Clear</button>
+            <button class="btn" id="cCopyAll">Copy list</button>
+          </div>
+        </div>
+        <div class="output" id="cList"></div>
+        <p class="hint">This list only exists in this tab. It disappears when you close the page.</p>
+      </div>
+    </section>
+
+    <details class="how">
+      <summary>How TrueRef keeps your work private</summary>
+      <div>
+        <p>Everything happens inside your browser. Your essay and files are never uploaded, saved or tracked. There is no account, no analytics and no database.</p>
+        <p>The only time anything goes online is when you choose a DOI lookup or switch on "Look up details online". Then only the reference details go to Crossref, a free public database of published works.</p>
+        <p>Want proof? Once this page has loaded, turn off your Wi-Fi. Checking, fixing and creating references all still work.</p>
+        <p>TrueRef never rewrites your essay, so it cannot make your writing look AI-generated. It only points out things for you to fix in your own words.</p>
+      </div>
+    </details>
+  </main>
+
+  <footer>
+    <p>TrueRef is a helper, not a marker. Always follow your own course or module handbook, as universities adapt referencing styles.</p>
+    <p>Built by Abdulraheem Oki. Formatting uses open citation styles from the Citation Style Language project.</p>
+  </footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="vendor/citeproc.js"></script>
+<script src="vendor/mammoth.browser.min.js"></script>
+<script src="core.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

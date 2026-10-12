@@ -1,0 +1,15 @@
+Organisations increasingly rely on data (Davenport and Harris 2017, 23). As Porter (1985) argued, competitive advantage
+stems from value chains. Teece, Pisano, and Shuen (1997) introduced dynamic capabilities, and later work built on this
+(Teece 2007; Eisenhardt and Martin 2000).
+
+Bibliography
+Davenport, Thomas H., and Jeanne G. Harris. 2017. Competing on Analytics: The New
+Science of Winning. Boston: Harvard Business Review Press.
+Eisenhardt, Kathleen M., and Jeffrey A. Martin. 2000. "Dynamic Capabilities: What Are
+They?" Strategic Management Journal 21 (10–11): 1105–21.
+Porter, Michael E. 1985. Competitive Advantage: Creating and Sustaining Superior
+Performance. New York: Free Press.
+Teece, David J. 2007. "Explicating Dynamic Capabilities." Strategic Management Journal
+28 (13): 1319–50.
+Teece, David J., Gary Pisano, and Amy Shuen. 1997. "Dynamic Capabilities and Strategic
+Management." Strategic Management Journal 18 (7): 509–33.

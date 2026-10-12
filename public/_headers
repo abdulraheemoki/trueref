@@ -1,0 +1,10 @@
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; worker-src 'self' blob:; connect-src 'self' https://api.crossref.org; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'
+  Referrer-Policy: no-referrer
+  X-Content-Type-Options: nosniff
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
+
+/vendor/*
+  Cache-Control: public, max-age=604800
+/csl/*
+  Cache-Control: public, max-age=604800
